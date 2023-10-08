@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bus Schedule</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <div class="header">
+        <h1>ศาลาพระเกี้ยว STATION <br> NEXT SCHEDULED DEPARTURE</h1>
+    </div>
+    <div id="schedule-table">
+        <div class="bus-info">
+            <p><strong>Bus 1:</strong> <span id="bus1">Calculating...</span></p>
+        </div>
+        <div class="bus-info">
+            <p><strong>Bus 2:</strong> <span id="bus2">Calculating...</span></p>
+        </div>
+        <div class="bus-info">
+            <p><strong>Bus 3:</strong> <span id="bus3">Calculating...</span></p>
+        </div>
+        <div class="bus-info">
+            <p><strong>Bus 4:</strong> <span id="bus4">Calculating...</span></p>
+        </div>
+        <div class="bus-info">
+            <p><strong>Bus 5:</strong> <span id="bus5">Calculating...</span></p>
+        </div>
+    </div>
+
+        </div>
+    </div>
+    
+    <script>
+        // Predefined bus arrival times as HH:mm strings (Monday to Friday)
+        //omg test test
+        const busTimes = [
+            ["06:30", "06:45", "07:00", "07:06", "07:12", "07:18", "07:24", "07:30", "07:36", "07:42", "07:48", "07:54", "08:00", "08:06", "08:12", "08:18", "08:24", "08:30", "08:36", "08:42", "08:48", "08:54", "09:00", "09:09", "09:18", "09:27", "09:36", "09:45", "09:54", "10:00", "10:09", "10:18", "10:27", "10:36", "10:45", "10:54", "11:00", "11:09", "11:18", "11:27", "11:36", "11:45", "11:54", "12:00", "12:06", "12:12", "12:18", "12:24", "12:30", "12:36", "12:42", "12:48", "12:54", "13:00", "13:09", "13:18", "13:27", "13:36", "13:45", "13:54", "14:00", "14:09", "14:18", "14:27", "14:36", "14:45", "14:54", "15:00", "15:09", "15:18", "15:27", "15:36", "15:45", "15:54", "16:00", "16:06", "16:12", "16:18", "16:24", "16:30", "16:36", "16:42", "16:48", "16:54", "17:00", "17:06", "17:12", "17:18", "17:24", "17:30", "17:36", "17:42", "17:48", "17:54", "18:00", "18:06", "18:12", "18:18", "18:24", "18:30", "18:36", "18:42", "18:48", "18:54", "19:00", "19:15", "19:45", "20:15", "20:45", "21:15", "21:45"], // Bus 1
+            ["06:45", "07:00", "07:07", "07:15", "07:22", "07:30", "07:37", "07:45", "07:52", "08:00", "08:07", "08:15", "08:22", "08:30", "08:37", "08:45", "08:52", "09:00", "09:12", "09:24", "09:36", "09:48", "10:00", "10:12", "10:24", "10:36", "10:48", "11:00", "11:07", "11:15", "11:22", "11:30", "11:37", "11:45", "11:52", "12:00", "12:12", "12:24", "12:36", "12:48", "13:00", "13:12", "13:24", "13:36", "13:48", "14:00", "14:12", "14:24", "14:36", "14:48", "16:00", "16:07", "16:15", "16:22", "16:30", "16:37", "16:45", "16:52", "17:00", "17:07", "17:15", "17:22", "17:30", "17:37", "17:45", "17:52", "18:00", "18:07", "18:15", "18:22", "18:30", "18:37", "18:45", "18:52", "19:00", "19:15", "19:45", "20:15", "20:45", "21:15", "21:45"], // Bus 2
+            ["06:50", "07:05", "07:20", "07:35", "07:50", "08:05", "08:20", "08:35", "08:50", "09:05", "09:25", "09:45", "10:05", "10:25", "10:45", "11:05", "11:25", "11:45", "12:05", "12:20", "12:35", "12:50", "13:05", "13:25", "13:45", "14:05", "14:25", "14:45", "15:05", "15:25", "15:45", "15:05", "15:20", "15:35", "15:50", "17:05", "17:20", "17:35", "17:50", "18:05", "18:20", "18:35", "18:50"], // Bus 3
+            ["06:40", "06:55", "07:03", "07:10", "07:18", "07:25", "07:33", "07:40", "07:48", "07:55", "08:03", "08:10", "08:18", "08:25", "08:33", "08:40", "08:48", "08:55", "09:03", "09:15", "09:27", "09:39", "09:51", "10:03", "10:15", "10:27", "10:39", "10:51", "11:03", "11:15", "11:27", "11:39", "11:51", "12:03", "12:10", "12:18", "12:25", "12:33", "12:40", "12:48", "12:55", "13:03", "13:15", "13:27", "13:39", "13:51", "14:03", "14:15", "14:27", "14:39", "14:51", "15:03", "15:15", "15:27", "15:39", "15:51", "16:03", "16:10", "16:18", "16:25", "16:33", "16:40", "16:48", "16:55", "17:03", "17:10", "17:18", "17:25", "17:33", "17:40", "17:48", "17:55", "18:03", "18:10", "18:18", "18:25", "18:33", "18:40", "18:48", "18:55", "19:10", "19:40", "20:10", "20:40", "21:10", "21:40"], // Bus 4
+            ["06:45", "07:00", "07:15", "07:30", "07:45", "08:00", "08:15", "08:30", "08:45", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:15", "16:30", "16:45", "17:00", "17:15", "17:30", "17:45", "18:00", "18:15", "18:30", "18:45", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"], // Bus 5
+        ];
+
+        function displayNextBusTimes() {
+            const currentTime = new Date();
+            const currentHours = currentTime.getHours();
+            const currentMinutes = currentTime.getMinutes();
+            const currentDayOfWeek = currentTime.getDay();
+
+            // Check if it's the weekend (Saturday or Sunday)
+            if (currentDayOfWeek === 0 || currentDayOfWeek === 6) {
+                const nextBus1Time = new Date();
+                nextBus1Time.setHours(6);
+                nextBus1Time.setMinutes(30);
+                nextBus1Time.setSeconds(0);
+
+                const nextBus2Time = new Date();
+                nextBus2Time.setHours(6);
+                nextBus2Time.setMinutes(45);
+                nextBus2Time.setSeconds(0);
+
+                const nextBus3Time = new Date();
+                nextBus3Time.setHours(6);
+                nextBus3Time.setMinutes(50);
+                nextBus3Time.setSeconds(0);
+
+                const nextBus4Time = new Date();
+                nextBus4Time.setHours(6);
+                nextBus4Time.setMinutes(40);
+                nextBus4Time.setSeconds(0);
+
+                const nextBus5Time = new Date();
+                nextBus5Time.setHours(6);
+                nextBus5Time.setMinutes(45);
+                nextBus5Time.setSeconds(0);
+
+                if (currentHours < 6 || (currentHours === 6 && currentMinutes < 30)) {
+                    const timeDifference1 = nextBus1Time - currentTime;
+                    const minutesUntilBus1 = Math.floor(timeDifference1 / (1000 * 60));
+                    const secondsUntilBus1 = Math.floor((timeDifference1 % (1000 * 60)) / 1000);
+
+                    const timeDifference2 = nextBus2Time - currentTime;
+                    const minutesUntilBus2 = Math.floor(timeDifference2 / (1000 * 60));
+                    const secondsUntilBus2 = Math.floor((timeDifference2 % (1000 * 60)) / 1000);
+
+                    const timeDifference3 = nextBus3Time - currentTime;
+                    const minutesUntilBus3 = Math.floor(timeDifference3 / (1000 * 60));
+                    const secondsUntilBus3 = Math.floor((timeDifference3 % (1000 * 60)) / 1000);
+
+                    const timeDifference4 = nextBus4Time - currentTime;
+                    const minutesUntilBus4 = Math.floor(timeDifference4 / (1000 * 60));
+                    const secondsUntilBus4 = Math.floor((timeDifference4 % (1000 * 60)) / 1000);
+
+                    const timeDifference5 = nextBus5Time - currentTime;
+                    const minutesUntilBus5 = Math.floor(timeDifference5 / (1000 * 60));
+                    const secondsUntilBus5 = Math.floor((timeDifference5 % (1000 * 60)) / 1000);
+
+                    document.getElementById("bus1").textContent = `Inoperative (${minutesUntilBus1} min ${secondsUntilBus1} sec)`;
+                    document.getElementById("bus2").textContent = `Inoperative (${minutesUntilBus2} min ${secondsUntilBus2} sec)`;
+                    document.getElementById("bus3").textContent = `Inoperative (${minutesUntilBus3} min ${secondsUntilBus3} sec)`;
+                    document.getElementById("bus4").textContent = `Inoperative (${minutesUntilBus4} min ${secondsUntilBus4} sec)`;
+                    document.getElementById("bus5").textContent = `Inoperative (${minutesUntilBus5} min ${secondsUntilBus5} sec)`;
+                }
+                return;
+            }
+
+            // Check if it's within the "Inactive" time range (09:46 PM - 06:29 AM)
+            const isInactiveTime = (currentHours === 21 && currentMinutes >= 46) || (currentHours < 6 || (currentHours === 6 && currentMinutes < 29));
+
+            if (isInactiveTime) {
+                const nextBus1Time = new Date();
+                nextBus1Time.setHours(6);
+                nextBus1Time.setMinutes(30);
+                nextBus1Time.setSeconds(0);
+
+                const nextBus2Time = new Date();
+                nextBus2Time.setHours(6);
+                nextBus2Time.setMinutes(45);
+                nextBus2Time.setSeconds(0);
+
+                const nextBus3Time = new Date();
+                nextBus3Time.setHours(6);
+                nextBus3Time.setMinutes(50);
+                nextBus3Time.setSeconds(0);
+
+                const nextBus4Time = new Date();
+                nextBus4Time.setHours(6);
+                nextBus4Time.setMinutes(40);
+                nextBus4Time.setSeconds(0);
+
+                const nextBus5Time = new Date();
+                nextBus5Time.setHours(6);
+                nextBus5Time.setMinutes(45);
+                nextBus5Time.setSeconds(0);
+
+                const timeDifference1 = nextBus1Time - currentTime;
+                const minutesUntilBus1 = Math.floor(timeDifference1 / (1000 * 60));
+                const secondsUntilBus1 = Math.floor((timeDifference1 % (1000 * 60)) / 1000);
+
+                const timeDifference2 = nextBus2Time - currentTime;
+                const minutesUntilBus2 = Math.floor(timeDifference2 / (1000 * 60));
+                const secondsUntilBus2 = Math.floor((timeDifference2 % (1000 * 60)) / 1000);
+
+                const timeDifference3 = nextBus3Time - currentTime;
+                const minutesUntilBus3 = Math.floor(timeDifference3 / (1000 * 60));
+                const secondsUntilBus3 = Math.floor((timeDifference3 % (1000 * 60)) / 1000);
+
+                const timeDifference4 = nextBus4Time - currentTime;
+                const minutesUntilBus4 = Math.floor(timeDifference4 / (1000 * 60));
+                const secondsUntilBus4 = Math.floor((timeDifference4 % (1000 * 60)) / 1000);
+
+                const timeDifference5 = nextBus5Time - currentTime;
+                const minutesUntilBus5 = Math.floor(timeDifference5 / (1000 * 60));
+                const secondsUntilBus5 = Math.floor((timeDifference5 % (1000 * 60)) / 1000);
+
+                document.getElementById("bus1").textContent = `Inactive (${minutesUntilBus1} min ${secondsUntilBus1} sec)`;
+                document.getElementById("bus2").textContent = `Inactive (${minutesUntilBus2} min ${secondsUntilBus2} sec)`;
+                document.getElementById("bus3").textContent = `Inactive (${minutesUntilBus3} min ${secondsUntilBus3} sec)`;
+                document.getElementById("bus4").textContent = `Inactive (${minutesUntilBus4} min ${secondsUntilBus4} sec)`;
+                document.getElementById("bus5").textContent = `Inactive (${minutesUntilBus5} min ${secondsUntilBus5} sec)`;
+
+                return;
+            }
+
+            // Find the next bus times for each bus
+            const nextBusTimes = busTimes.map(busSchedule => {
+                for (const time of busSchedule) {
+                    const [hour, minute] = time.split(":");
+                    const busTime = new Date();
+                    busTime.setHours(parseInt(hour));
+                    busTime.setMinutes(parseInt(minute));
+                    busTime.setSeconds(0);
+
+                    if (busTime > currentTime) {
+                        const timeDifference = busTime - currentTime;
+                        const minutesUntilBus = Math.floor(timeDifference / (1000 * 60));
+                        const secondsUntilBus = Math.floor((timeDifference % (1000 * 60)) / 1000);
+                        return `${minutesUntilBus} min ${secondsUntilBus} sec`;
+                    }
+                }
+                return "Inactive";
+            });
+
+            // Update the HTML with the next bus times
+            document.getElementById("bus1").textContent = nextBusTimes[0];
+            document.getElementById("bus2").textContent = nextBusTimes[1];
+            document.getElementById("bus3").textContent = nextBusTimes[2];
+            document.getElementById("bus4").textContent = nextBusTimes[3];
+            document.getElementById("bus5").textContent = nextBusTimes[4];
+        }
+
+
+        // Display the next bus times on page load
+        displayNextBusTimes();
+
+         // Update the countdown timers and arrival times every second
+         setInterval(displayNextBusTimes, 1000); // 1000 milliseconds = 1 second
+        displayNextBusTimes(); // Display initial countdown timers and arrival times 
+        
+    </script>
+
+    <footer>
+        <div class="footer-content">
+            <div class="left">© 2023 copyright</div>
+            <div class="center">Created by @namwaa_a and @planpunnarit</div>
+            <div class="right">Email: cupopdeparture@gmail.com</div>
+        </div>
+    </footer>
+
+</body>
+</html>
