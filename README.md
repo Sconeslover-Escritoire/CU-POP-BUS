@@ -29,7 +29,7 @@ To run the CU Real-time POP Bus application locally, follow these steps:
 1. **Clone the repository** to your local machine:
 
    ```bash
-   git clone https://github.com/your-username/cu-realtime-pop-bus.git
+   git clone https://github.com/Meawarts/CU-POP-BUS.git
 2. Navigate to the project directory:
    ```bash
    cd cu-realtime-pop-bus
