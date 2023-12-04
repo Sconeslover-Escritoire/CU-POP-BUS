@@ -1,4 +1,4 @@
-# CU POP Bus Next Scheduled Departure
+# CU POP Bus Next Scheduled Departure 🚌🕒
 
 **CU Real-time POP Bus** is a web application designed to provide real-time information about the next scheduled departure bus at Sala Prakeaw station on the Chulalongkorn University campus. The application displays a countdown timer for the next departing bus and also indicates the next approaching bus to the station.
 
