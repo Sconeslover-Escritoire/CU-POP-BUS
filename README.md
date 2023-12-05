@@ -32,7 +32,7 @@ To run the CU Real-time POP Bus application locally, follow these steps:
    git clone https://github.com/Meawarts/CU-POP-BUS.git
 2. Navigate to the project directory:
    ```bash
-   cd cu-realtime-pop-bus
+   cd cu-pop-bus
 3. Install the necessary dependencies:
    ```bash
    npm install
